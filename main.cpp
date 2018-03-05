@@ -37,19 +37,19 @@ double calculatePI()
     Circle _circle;
     Square _square;
     
-    // Gốc tọa độ (0,0), bán kính 1
+    // (0,0), r = 1
     _circle.center.x=0;
     _circle.center.y=0;
     _circle.r=1;
-    // Dựa vào quan hệ hình tròn nằm trong hình vuông nên dễ dàng xác định được vị trí hình vuông như sau:
+    // Base of the relationship between the circle in the square
     _square.tl.x=_circle.center.x-_circle.r;
     _square.tl.y=_circle.center.y+_circle.r;
     
     _square.br.x=_circle.center.x+_circle.r;
     _square.br.y=_circle.center.y-_circle.r;
     
-    /*Khai báo một điểm ngẫu nhiên nằm trong hình vuông
-     Để nằm trong hình vuông tọa độ điểm này phải thỏa mãn 2 điều kiện
+    /*Find the random point in the circle under
+     2 conditions
      tl.x <= _rand_point.x <= br.x
      br.y <= _rand_point.y <= tl.y
      */
@@ -59,7 +59,9 @@ double calculatePI()
     
     
     double PI=0;
-    //Khai báo 1 biến điếm các điểm nằm trong hình tròn, và tổng các điểm nằm trong hình vuông
+    
+    
+    //Find all the points in the circle and count how many points in the square
     int count_circle_points = 0, count_square_points = 0;
     for (double i = 0; i < INTERVAL; i++)
     {
