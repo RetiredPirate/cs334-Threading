@@ -2,30 +2,26 @@
 
 #import "sudokuChecker.h"
 
-#import <thread>
+#import <pthread.h>
 #import <string>
+#import <cstdlib>
+#import <iostream>
 
 using namespace std;
 
 
+#define SUDOKU_SIZE 9;
 
-class sudokuChecker {
-
-public:
-    static const int SUDOKU_SIZE = 9;
-    int main(int , const char* []);
-    bool singleCheck(int []) noexcept;
-    bool sudokuCheck(int [][9]);
-};
 
 sudokuChecker::sudokuChecker() {
 }
 
 
-int sudokuChecker::main(int argc, const char* argv[]) {
+int main() {
 
     int testPuzzle[SUDOKU_SIZE][SUDOKU_SIZE] = {};
-    for (int i = 0; i < SUDOKU_SIZE; i++) {
+    int i;
+    for (i = 0; i < SUDOKU_SIZE; i++) {
         for (int j = 0; j < SUDOKU_SIZE; j++) {
             testPuzzle[i][j] = i;
         }
@@ -62,12 +58,26 @@ bool sudokuChecker::singleCheck(int single[]) {
 bool sudokuChecker::sudokuCheck(int puzzleGrid[][9]) {
     // trust its a 9x9 array
 
-    std::thread threadOne(&sudokuChecker::singleCheck, puzzleGrid[0]);
+    pthread_t threads[1];
+    int rc;
+    int i;
 
-    threadOne.join();
+    for (i = 0; i < 1; i++) {
+        cout << "Creating thread.";
+        rc = pthread_create(&threads[i], NULL, sudokuChecker::singleCheck, puzzleGrid[0]);
+
+        if (rc) {
+            cout << "failed.";
+            exit(-1);
+        }
+    }
+
+    // threadOne.join();
 
     // if (x) {
     //     return 0;
     // }
+pthread_exit(NULL);
+
     return true;
 }
