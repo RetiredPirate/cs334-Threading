@@ -38,7 +38,6 @@ void *rowCheck(void* _index) {
         for (int i = 0; i < SUDOKU_SIZE; i++) {
             if (checkList[i] != 1) {
                 isValid = false;
-                cout << "ROW";
                 return NULL;
             }
         }
@@ -68,7 +67,6 @@ void *columnCheck(void* _index) {
         for (int i = 0; i < SUDOKU_SIZE; i++) {
             if (checkList[i] != 1) {
                 isValid = false;
-                cout << "COL";
                 return NULL;
             }
         }
@@ -101,7 +99,6 @@ void *boxCheck(void* _index) {
             for (int i = 0; i < SUDOKU_SIZE; i++) {
                 if (checkList[i] != 1) {
                     isValid = false;
-                    cout << "BOX";
                     return NULL;
                 }
             }
@@ -119,6 +116,8 @@ void *boxCheck(void* _index) {
     spawns a thread to check the validity of each row, column and box
 */
 void sudokuCheck() {
+
+    isValid = true;
 
     pthread_t threads[3];
 
@@ -146,6 +145,7 @@ int main() {
 
     // Only create one puzzle at a time
 
+    // Fresh Puzzle
     testPuzzle = new int*[SUDOKU_SIZE];
     for (int i = 0; i < SUDOKU_SIZE; i++)  {
         testPuzzle[i] = new int[SUDOKU_SIZE];
@@ -183,10 +183,6 @@ int main() {
         }
     }
 
-#if INVALID
-    testPuzzle[0][0] = 5;
-#endif
-
     // print puzzle to make sure its valid
     for (int i = 0; i < SUDOKU_SIZE; i++) {
         for (int j = 0; j < SUDOKU_SIZE; j++) {
@@ -195,12 +191,8 @@ int main() {
         cout << endl;
     }
 
-    isValid = true;
-    // puzzle will be marked invalid if it fails a test, valid by default
-
     sudokuCheck(); //spawns threads
 
-    delete testPuzzle;
     string validity;
 
     if (isValid) {
@@ -211,6 +203,38 @@ int main() {
     }
 
     cout << endl << "The puzzle is " << validity << "!" << endl;
+
+    cout << endl << endl << endl;
+
+
+
+
+
+    // Make the puzzle invalid and test again
+    testPuzzle[0][0] = 5;
+    testPuzzle[4][5] = 7;
+
+    // print puzzle
+    for (int i = 0; i < SUDOKU_SIZE; i++) {
+        for (int j = 0; j < SUDOKU_SIZE; j++) {
+            cout << testPuzzle[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    sudokuCheck(); //spawns threads
+
+    delete testPuzzle;
+
+    if (isValid) {
+        validity = "valid";
+    }
+    else {
+        validity = "invalid";
+    }
+
+    cout << endl << "The puzzle is " << validity << "!" << endl;
+
 
     return 1;
 }
